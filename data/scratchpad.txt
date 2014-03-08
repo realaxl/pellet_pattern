@@ -1,0 +1,44 @@
+08.03.2014
+-------------------------------------------------------------------------------
+  "mona_lisa.jpg",
+  "William-Shatner-Captain-Kirk.jpg",
+  "nice_tree.jpg",
+  "John-Lennon.jpg",
+  "einstein.jpg",
+  "Donkey_Kong.PNG",
+  "Papa_Smurf1.jpg",
+  "MarioNSMBWii.png",
+  "my_little_pony.png",
+  "spock.jpg",
+  "HackFFM_Logo.PNG",
+  "cute-cats-cats-8477446-600-600.jpg",
+  "oshw_product_page.png",
+  "Shrek_3d.jpg",
+  "android_logo_480x480.png",
+
+-------------------------------------------------------------------------------
+  
+  int euclidian_color_match(int r, int g, int b) {
+  float dist = 10000, dist_t;
+  int best_id = 0;
+
+  for (int i = 0; i < max_pellet_id; i ++) {
+    dist_t = sqrt(sq(r - pellet_c[i][0]) + sq(g - pellet_c[i][1]) + sq(b - pellet_c[i][2]));
+    if (dist_t < dist) {
+      best_id = i;
+      dist = dist_t;
+    }
+  }
+  return (best_id);
+}
+
+-------------------------------------------------------------------------------
+
+      // contrast ...
+      for (int i = 0; i < 3; i ++) {
+        float f = float(comp[i]) - 128;
+        f = 128 + f * 1.0;
+        comp[i] = max(0, min(int(f), 255));
+      }
+	  
+-------------------------------------------------------------------------------

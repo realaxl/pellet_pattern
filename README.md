@@ -24,7 +24,7 @@ Color quantification
 Examples
 --------
 
-![data\examples\Mona_Lisa_closest_match](data\examples\Mona_Lisa_closest_match.png)
+![data\examples\Mona_Lisa_closest_match](data\examples\Mona_Lisa_closest_match.png?raw=true)
 
 Environment
 -----------

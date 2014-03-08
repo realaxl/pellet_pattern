@@ -59,7 +59,13 @@ class pellet {
     c = color (RGB[0], RGB[1], RGB[2]);
     return(c);
   }
- 
+
+  // add color components of another pellet
+  void add_color(pellet p) {
+    for (int i = 0; i < 3; i ++)
+      RGB[i] += p.RGB[i];
+  }
+  
   void enable() {
     enabled = true;
   } 

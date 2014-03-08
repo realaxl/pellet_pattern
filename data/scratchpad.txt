@@ -49,3 +49,49 @@ TODO
       }
 	  
 -------------------------------------------------------------------------------
+
+  // Floyd Steinberg Dithering --> fill error diffusion array
+  for (int i = 0; i < (pellet_nx + 1); i ++)
+    for (int ii = 0; ii < 2; ii ++)
+      for (int iii = 0; iii < 3; iii ++)
+        FSD[i][ii][iii] = 0;
+
+		
+      // --------------------------------------------------------------
+      // Floyd Steinberg Dithering --> fill error diffusion array
+      // --------------------------------------------------------------
+      /*
+      comp[0] = int(red(c));
+      comp[1] = int(green(c));
+      comp[2] = int(blue(c));
+
+      // contrast ...
+      for (int i = 0; i < 3; i ++) {
+        float f = float(comp[i]) - 128;
+        f = 128 + f * 1.0;
+        comp[i] = max(0, min(int(f), 255)) + FSD[x][0][i];
+      }
+
+
+      best_id = euclidian_color_match(comp[0], comp[1], comp[2]);
+
+      fill(pellet_c[best_id][0], pellet_c[best_id][1], pellet_c[best_id][2]);
+      ellipse (scr_x + pellet_D * (pellet_nx + 4), scr_y, pellet_D, pellet_D);
+
+      for (int i = 0; i < 3; i ++) {
+        int quant_error = comp[i] - pellet_c[best_id][i];
+        
+        FSD[x + 1][0][i] += (quant_error * 7) / 16;
+        FSD[x + 0][1][i] += (quant_error * 5) / 16;
+        FSD[x + 1][1][i] += (quant_error * 1) / 16;
+        if (x > 0)
+          FSD[x - 1][1][i] += (quant_error * 3) / 16;
+      }
+      */
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+= new pellet[pellet_nx + 1][2];
+
+-------------------------------------------------------------------------------
+

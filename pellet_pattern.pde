@@ -21,9 +21,8 @@ String pellet_info = "";
 // --------------------------------------------------------------
 // color array & defaults / static for 6 colors
 // --------------------------------------------------------------
-int[][] pellet_c = new int[20][3];
-int max_pellet_id = 0;
 ArrayList<pellet> pellets;
+int max_pellet_id = 0;
 
 // defaults
 int transparent_id = 2;
@@ -44,28 +43,24 @@ String[] image_files = {
   "mona_lisa.jpg",
   "William-Shatner-Captain-Kirk.jpg",
   "nice_tree.jpg",
-  "John-Lennon.jpg",
   "einstein.jpg",
-  "Donkey_Kong.PNG",
-  "Papa_Smurf1.jpg",
-  "MarioNSMBWii.png",
-  "my_little_pony.png",
   "spock.jpg",
   "HackFFM_Logo.PNG",
   "cute-cats-cats-8477446-600-600.jpg",
   "oshw_product_page.png",
-  "Shrek_3d.jpg",
-  "android_logo_480x480.png",
+//  "android_logo_480x480.png",
 };
 
 int render_image = 4;
+int current_image = render_image;
 
 // --------------------------------------------------------------
 // Floyd Steinberg Dithering
 // http://en.wikipedia.org/wiki/Floyd%E2%80%93Steinberg_dithering
 // --------------------------------------------------------------
 // [line_x][line_y][RGB]
-int [][][] FSD = new int[pellet_nx + 1][2][3];
+//int [][][] FSD = new int[pellet_nx + 1][2][3];
+pellet [][] FSD; 
 
 void setup() {
   size (1000, 650);
@@ -74,21 +69,23 @@ void setup() {
   pellets = new ArrayList<pellet>();
   read_pellet_colors();
   
+  // Floyd Steinberg Dithering --> initialize error diffusion array
+  FSD = new pellet[pellet_nx + 1][2];
   for (int i = 0; i < (pellet_nx + 1); i ++)
     for (int ii = 0; ii < 2; ii ++)
-      for (int iii = 0; iii < 3; iii ++)
-        FSD[i][ii][iii] = 0;
+      FSD[i][ii] = new pellet(0, 0, 0);
     
+  render_pellets(image_files[current_image]);
 }
 
 // --------------------------------------------------------------
 
-int current_image = 0;
 void draw() {
-  if (current_image < 1) {  //image_files.length) {
-    render_pellets(image_files[current_image]);
-    current_image ++;
-  }
+  // if (current_image < 1) {  //image_files.length) {
+//
+//    current_image ++;
+//  }
+
 }
 
 
@@ -100,16 +97,16 @@ void keyPressed() {
   
   switch(keyCode) {
     case UP :
-      brightness += 12;
+      contrast *= 1.1;
       break;
     case DOWN :
-      brightness -= 12;
-      break;
-    case LEFT :
       contrast /= 1.1;
       break;
+    case LEFT :
+      brightness += 12;
+      break;
     case RIGHT :
-      contrast *= 1.1;
+      brightness -= 12;
       break;
   }
 
@@ -129,9 +126,14 @@ void keyPressed() {
       pellets.get(0).enable();
       pellets.get(5).enable();
       break;
+    case 'n' :
+      current_image ++;
+      if (current_image >= image_files.length)
+        current_image = 0;
+      break;
   }    
   
-  render_pellets(image_files[render_image]);
+  render_pellets(image_files[current_image]);
   display_curve();
 }
 
@@ -149,11 +151,12 @@ void display_curve() {
     float y = 128 + ((i - 128) * contrast) + brightness;
     y = max(0, min(255, y));
 
-    stroke(0);
+    stroke(64);
     point(mx + i, my + 255 - i);
 
     stroke(255, 0, 0);
     point(mx + i, my + 255 - y);
+    point(mx + i, my + 254 - y);
   }
 }
 
@@ -222,42 +225,33 @@ void render_pellets(String filename) {
       // --------------------------------------------------------------
       // Floyd Steinberg Dithering --> fill error diffusion array
       // --------------------------------------------------------------
-      /*
-      comp[0] = int(red(c));
-      comp[1] = int(green(c));
-      comp[2] = int(blue(c));
+      pixel.set_color(c);
+      pixel.set_brightness_and_contrast(brightness, contrast);
+      pixel.add_color(FSD[x][0]);
 
-      // contrast ...
-      for (int i = 0; i < 3; i ++) {
-        float f = float(comp[i]) - 128;
-        f = 128 + f * 1.0;
-        comp[i] = max(0, min(int(f), 255)) + FSD[x][0][i];
-      }
+      best_id = euclidian_color_match(pixel);
 
-
-      best_id = euclidian_color_match(comp[0], comp[1], comp[2]);
-
-      fill(pellet_c[best_id][0], pellet_c[best_id][1], pellet_c[best_id][2]);
+      fill(pellets.get(best_id).get_color());
       ellipse (scr_x + pellet_D * (pellet_nx + 4), scr_y, pellet_D, pellet_D);
 
+      // distribute color quantization error to neighbor pixels
       for (int i = 0; i < 3; i ++) {
-        int quant_error = comp[i] - pellet_c[best_id][i];
+        float quant_error = pixel.RGB[i] - pellets.get(best_id).RGB[i];
         
-        FSD[x + 1][0][i] += (quant_error * 7) / 16;
-        FSD[x + 0][1][i] += (quant_error * 5) / 16;
-        FSD[x + 1][1][i] += (quant_error * 1) / 16;
+        FSD[x + 1][0].RGB[i] += (quant_error * 7) / 16;
+        FSD[x + 0][1].RGB[i] += (quant_error * 5) / 16;
+        FSD[x + 1][1].RGB[i] += (quant_error * 1) / 16;
         if (x > 0)
-          FSD[x - 1][1][i] += (quant_error * 3) / 16;
+          FSD[x - 1][1].RGB[i] += (quant_error * 3) / 16;
       }
-      */
     }
 
     // Floyd Steinberg Dithering --> shift error diffusion array for next line
-    for (int x = 0; x < (pellet_nx + 1); x ++)
-      for (int i = 0; i < 3; i ++) {
-        FSD[x][0][i] = FSD[x][1][i];
-        FSD[x][1][i] = 0;
-      } 
+    for (int x = 0; x < (pellet_nx + 1); x ++) {
+      for (int i = 0; i < 3; i ++) 
+        FSD[x][0].RGB[i] = FSD[x][1].RGB[i];
+      FSD[x][1].set_RGB(0, 0, 0);
+    } 
   }
   
   String[] t = splitTokens(filename, ".");
@@ -322,10 +316,6 @@ void read_pellet_colors() {
     int blue    = get_pellet_byte(children[i].getString("blue"));
     String name = children[i].getContent();
     
-    pellet_c[max_pellet_id][0] = red;
-    pellet_c[max_pellet_id][1] = green;
-    pellet_c[max_pellet_id][2] = blue;
-
     pellets.add(new pellet(red, green, blue));
   
     // color display name 

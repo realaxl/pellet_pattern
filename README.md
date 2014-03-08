@@ -10,12 +10,13 @@ Keyboard
 	* **b** = black and white, only
 	* **a** = standard palette 
 * *brightness and contrast transformations*
-	* **up** = bighter
-	* **down** = darker
-	* **left** = less contrast
-	* **right** = more contrast
+	* **up** = less contrast
+	* **down** = more contrast
+	* **left** = brighter
+	* **right** = darker
 	* **r** = reset brightness (0) and contrast (1) 
- 
+* *image options*
+	* **n** - next image (cycle through image list) 
 Color quantification
 --------------------
 * Method #1: [Euclidean color distance](http://en.wikipedia.org/wiki/Euclidean_distance) to get the closes matching pellet color in RGB color space
@@ -24,10 +25,14 @@ Color quantification
 Examples
 --------
 
-![data/examples/Mona_Lisa_closest_match](data/examples/Mona_Lisa_closest_match.png?raw=true)
+![Mona Lisa](data/examples/Mona_Lisa_closest_match.png)
+![Spock](data/examples/Spock_B+W.png)
 
 Environment
 -----------
 * [Processing](http://www.processing.org/) Version 2.1
 * Windows 7 (64 bit)
 
+Version history
+---------------
+* 0.83 / 2014-03-08 - Floyd–Steinberg dithering with pellet objects

@@ -7,7 +7,7 @@
 // --------------------------------------------------------------
 // pellet config
 // --------------------------------------------------------------
-final String version_string = "0.82";
+final String version_string = "0.83";
 
 // --------------------------------------------------------------
 // pellet config
@@ -161,6 +161,11 @@ void display_curve() {
 }
 
 void render_pellets(String filename) {
+  int[] stat_pellets = new int [max_pellet_id];
+  int stat_pellet_sum = 0;
+  for (int i = 0; i < max_pellet_id; i ++)
+    stat_pellets[i] = 0;
+    
   background(64);
   println("Rendering " + filename + " ...");
 
@@ -220,8 +225,19 @@ void render_pellets(String filename) {
       
       fill(pellets.get(best_id).get_color());
       ellipse (scr_x, scr_y, pellet_D, pellet_D);
-
-
+      stat_pellets[best_id] ++;
+      stat_pellet_sum = 0;
+      for (int i = 0; i < max_pellet_id; i ++)
+        stat_pellet_sum += stat_pellets[i];
+        
+      for (int i = 0; i < max_pellet_id; i ++) {
+        print(align_right(pellets.get(i).name + " | ", 12));
+        print(align_right(stat_pellets[i] + " | ", 12));
+        print(align_right(round(100 * stat_pellets[i] / stat_pellet_sum) + " %", 7));
+        println();
+      }
+      println("-----");
+      
       // --------------------------------------------------------------
       // Floyd Steinberg Dithering --> fill error diffusion array
       // --------------------------------------------------------------
@@ -232,7 +248,7 @@ void render_pellets(String filename) {
       best_id = euclidian_color_match(pixel);
 
       fill(pellets.get(best_id).get_color());
-      ellipse (scr_x + pellet_D * (pellet_nx + 4), scr_y, pellet_D, pellet_D);
+      ellipse (scr_x + pellet_D * (pellet_nx + 10), scr_y, pellet_D, pellet_D);
 
       // distribute color quantization error to neighbor pixels
       for (int i = 0; i < 3; i ++) {
@@ -347,3 +363,10 @@ int get_pellet_byte(String s) {
   return (i);
 }
 
+
+// output functions
+String align_right(String s, int r) {
+  while (s.length() < r)
+    s = " " + s;
+  return(s);
+}

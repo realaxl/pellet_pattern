@@ -139,8 +139,8 @@ void keyPressed() {
 
 
 void display_curve() {
-  final int mx = width / 2;
-  final int my = height / 2 - 255;
+  final int mx = int(2 * pellet_D * (pellet_nx + 10));
+  final int my = height / 2 - 128;
   
   noStroke();
   fill(192);
@@ -169,14 +169,14 @@ void render_pellets(String filename) {
   background(64);
   println("Rendering " + filename + " ...");
 
-  noStroke();
-  fill(255);
-  
+  noStroke(); fill(255);
+  textAlign(LEFT, BOTTOM);
+
   text("Pellet rendering / Version " + version_string, 8, 16);
   text("Image filename: " + filename, 8, 32);
   text(pellet_nx + " x " + pellet_ny + " = " + pellet_nx * pellet_ny + " pellets", 8, 48);
   
-  text(pellet_info, pellet_D * (pellet_nx + 4), 16);
+  //text(pellet_info, pellet_D * (pellet_nx + 4), 16);
   
   PImage photo, photo_2;
   
@@ -191,6 +191,12 @@ void render_pellets(String filename) {
   
   photo.loadPixels();
   
+  // Floyd Steinberg Dithering --> reset distortion array
+  for (int x = 0; x < (pellet_nx + 1); x ++) {
+    FSD[x][0].set_RGB(0, 0, 0);
+    FSD[x][1].set_RGB(0, 0, 0);
+  } 
+
   // RGB array for pixel components
   int comp[] = new int [3];
   pellet pixel = new pellet(0, 0, 0);
@@ -217,7 +223,6 @@ void render_pellets(String filename) {
       // --------------------------------------------------------------
       // best color match
       // --------------------------------------------------------------
-
       pixel.set_color(c);
       pixel.set_brightness_and_contrast(brightness, contrast);
 
@@ -226,17 +231,7 @@ void render_pellets(String filename) {
       fill(pellets.get(best_id).get_color());
       ellipse (scr_x, scr_y, pellet_D, pellet_D);
       stat_pellets[best_id] ++;
-      stat_pellet_sum = 0;
-      for (int i = 0; i < max_pellet_id; i ++)
-        stat_pellet_sum += stat_pellets[i];
-        
-      for (int i = 0; i < max_pellet_id; i ++) {
-        print(align_right(pellets.get(i).name + " | ", 12));
-        print(align_right(stat_pellets[i] + " | ", 12));
-        print(align_right(round(100 * stat_pellets[i] / stat_pellet_sum) + " %", 7));
-        println();
-      }
-      println("-----");
+
       
       // --------------------------------------------------------------
       // Floyd Steinberg Dithering --> fill error diffusion array
@@ -268,6 +263,26 @@ void render_pellets(String filename) {
         FSD[x][0].RGB[i] = FSD[x][1].RGB[i];
       FSD[x][1].set_RGB(0, 0, 0);
     } 
+  }
+
+  stat_pellet_sum = 0;
+  for (int i = 0; i < max_pellet_id; i ++)
+    stat_pellet_sum += stat_pellets[i];
+    
+  for (int i = 0; i < max_pellet_id; i ++) {
+    print(align_right(pellets.get(i).name + " | ", 12));
+    print(align_right(stat_pellets[i] + " | ", 12));
+    print(align_right(round(100 * stat_pellets[i] / stat_pellet_sum) + " %", 7));
+    println();
+  }
+  println("-----");
+  textAlign(RIGHT, BOTTOM);
+  fill(255); noStroke();
+  for (int i = 0; i < max_pellet_id; i ++) {
+    int y2 = 16 * (i + 1);
+    text(pellets.get(i).name, width / 2, y2);
+    text(stat_pellets[i], width / 2 + 100, y2);
+    text(round(100 * stat_pellets[i] / stat_pellet_sum) + " %", width / 2 + 200, y2);
   }
   
   String[] t = splitTokens(filename, ".");

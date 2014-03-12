@@ -7,7 +7,7 @@
 // --------------------------------------------------------------
 // pellet config
 // --------------------------------------------------------------
-final String version_string = "0.83";
+final String version_string = "0.85";
 
 // --------------------------------------------------------------
 // pellet config
@@ -19,7 +19,7 @@ int pellet_ny = 48;
 String pellet_info = "";
 
 // --------------------------------------------------------------
-// color array & defaults / static for 6 colors
+// color array & defaults
 // --------------------------------------------------------------
 ArrayList<pellet> pellets;
 int max_pellet_id = 0;
@@ -68,7 +68,7 @@ void setup() {
 // --------------------------------------------------------------
 
 void draw() {
-  // if (current_image < 1) {  //image_files.length) {
+//  if (current_image < 1) {  //image_files.length) {
 //
 //    current_image ++;
 //  }

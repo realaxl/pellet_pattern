@@ -51,5 +51,6 @@ Environment
 
 Version history
 ---------------
+* 0.85 / 2014-03-12 - Change number of pellets with +/-
 * 0.84 / 2014-03-09 - Simple pellet statistics
 * 0.83 / 2014-03-08 - Floyd–Steinberg dithering with pellet objects

@@ -54,13 +54,6 @@ String[] image_files = {
 int render_image = 4;
 int current_image = render_image;
 
-// --------------------------------------------------------------
-// Floyd Steinberg Dithering
-// http://en.wikipedia.org/wiki/Floyd%E2%80%93Steinberg_dithering
-// --------------------------------------------------------------
-// [line_x][line_y][RGB]
-//int [][][] FSD = new int[pellet_nx + 1][2][3];
-pellet [][] FSD; 
 
 void setup() {
   size (1000, 650);
@@ -69,12 +62,6 @@ void setup() {
   pellets = new ArrayList<pellet>();
   read_pellet_colors();
   
-  // Floyd Steinberg Dithering --> initialize error diffusion array
-  FSD = new pellet[pellet_nx + 1][2];
-  for (int i = 0; i < (pellet_nx + 1); i ++)
-    for (int ii = 0; ii < 2; ii ++)
-      FSD[i][ii] = new pellet(0, 0, 0);
-    
   render_pellets(image_files[current_image]);
 }
 
@@ -118,7 +105,7 @@ void keyPressed() {
     case 'a' :
       for (int i = 0; i <  max_pellet_id; i ++)
         pellets.get(i).enable();
-      pellets.get(6).disable();
+      pellets.get(6).disable(); // grey
       break;
     case 'b' :
       for (int i = 0; i <  max_pellet_id; i ++)
@@ -130,6 +117,14 @@ void keyPressed() {
       current_image ++;
       if (current_image >= image_files.length)
         current_image = 0;
+      break;
+    case '+' :
+      pellet_nx = min(64, pellet_nx + 1);
+      pellet_ny = pellet_nx;
+      break;
+    case '-' :
+      pellet_nx = max(1, pellet_nx - 1);
+      pellet_ny = pellet_nx;
       break;
   }    
   
@@ -160,12 +155,25 @@ void display_curve() {
   }
 }
 
+
+
 void render_pellets(String filename) {
   int[] stat_pellets = new int [max_pellet_id];
   int stat_pellet_sum = 0;
   for (int i = 0; i < max_pellet_id; i ++)
     stat_pellets[i] = 0;
-    
+
+  // --------------------------------------------------------------
+  // Floyd Steinberg Dithering
+  // http://en.wikipedia.org/wiki/Floyd%E2%80%93Steinberg_dithering
+  // --------------------------------------------------------------
+  pellet [][] FSD; 
+  // Floyd Steinberg Dithering --> initialize error diffusion array
+  FSD = new pellet[pellet_nx + 1][2];
+  for (int i = 0; i < (pellet_nx + 1); i ++)
+    for (int ii = 0; ii < 2; ii ++)
+      FSD[i][ii] = new pellet(0, 0, 0);
+      
   background(64);
   println("Rendering " + filename + " ...");
 
@@ -191,11 +199,6 @@ void render_pellets(String filename) {
   
   photo.loadPixels();
   
-  // Floyd Steinberg Dithering --> reset distortion array
-  for (int x = 0; x < (pellet_nx + 1); x ++) {
-    FSD[x][0].set_RGB(0, 0, 0);
-    FSD[x][1].set_RGB(0, 0, 0);
-  } 
 
   // RGB array for pixel components
   int comp[] = new int [3];

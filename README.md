@@ -27,6 +27,8 @@ Keyboard
 	* **r** = reset brightness (0) and contrast (1) 
 * *image options*
 	* **n** - next image (cycle through image list) 
+	* **-** - decrease number of pellets (min. 1x1) 
+	* **+** - increase number of pellets (max. 64x64) 
 
 
 Color quantification

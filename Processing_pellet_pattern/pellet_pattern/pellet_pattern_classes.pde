@@ -15,6 +15,7 @@ class pellet {
 
   String name;
   color screen_color;
+  char symbol;
   
   pellet(int iR, int iG, int iB) {
     RGB[0] = iR;
@@ -40,6 +41,10 @@ class pellet {
   
   void set_name(String iname) {
     name = iname;
+  }
+  
+  void set_symbol(char c) {
+    symbol = c;
   }
   
   void set_brightness_and_contrast(float brightness, float contrast) {

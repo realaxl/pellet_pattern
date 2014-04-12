@@ -7,7 +7,7 @@
 // --------------------------------------------------------------
 // pellet config
 // --------------------------------------------------------------
-final String version_string = "0.85";
+final String version_string = "0.86";
 
 // --------------------------------------------------------------
 // pellet config
@@ -204,8 +204,14 @@ void render_pellets(String filename) {
   int comp[] = new int [3];
   pellet pixel = new pellet(0, 0, 0);
 
+  // Output string array
+  String[] string_out = new String[pellet_ny];
+
   for (int y = 0; y < pellet_ny; y ++) {
     int scr_y = height - int(pellet_D * (y + 1));
+    int string_y = pellet_ny - 1 - y;
+    
+    string_out[string_y] = "";
     
     for (int x = 0; x < pellet_nx; x ++) {
       int scr_x = int(pellet_D * (x + 1));
@@ -230,6 +236,8 @@ void render_pellets(String filename) {
       pixel.set_brightness_and_contrast(brightness, contrast);
 
       best_id = euclidian_color_match(pixel);
+      
+      string_out[string_y] += pellets.get(best_id).symbol;
       
       fill(pellets.get(best_id).get_color());
       ellipse (scr_x, scr_y, pellet_D, pellet_D);
@@ -268,6 +276,17 @@ void render_pellets(String filename) {
     } 
   }
 
+
+  String XML_string = "";
+  for (int y = 0; y < pellet_ny; y ++) {
+    println(string_out[y]);
+    XML_string += string_out[y] + "\n";
+  }
+  
+  XML pellet_XML = null;
+  pellet_XML.setName("pellet_pattern");
+  pellet_XML.setContent(XML_string);
+  
   stat_pellet_sum = 0;
   for (int i = 0; i < max_pellet_id; i ++)
     stat_pellet_sum += stat_pellets[i];
@@ -349,16 +368,18 @@ void read_pellet_colors() {
     int green   = get_pellet_byte(children[i].getString("green"));
     int blue    = get_pellet_byte(children[i].getString("blue"));
     String name = children[i].getContent();
+    char symbol = children[i].getString("symbol").charAt(0);
     
     pellets.add(new pellet(red, green, blue));
   
     // color display name 
-    pellets.get(max_pellet_id).set_name(children[i].getContent());
+    pellets.get(max_pellet_id).set_name(name);
+    pellets.get(max_pellet_id).set_symbol(symbol);
     
     if (enable == 0)
       pellets.get(max_pellet_id).disable();
 
-    println(id + " " + hex(red)+ " " + hex(green)+ " " + hex(blue) + " / "+ name);
+    println(id + " " + hex(red)+ " " + hex(green)+ " " + hex(blue) + " / "+ name + "(" + symbol + ")");
     pellet_info += id + " " + hex(red)+ " " + hex(green)+ " " + hex(blue) + " / "+ name + "\n";
       
     max_pellet_id ++;

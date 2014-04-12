@@ -10,12 +10,18 @@
 
 import processing.serial.*;
 
-int lf = 10;    // Linefeed in ASCII
-String myString = null;
+char lf = char(10);    // Linefeed in ASCII
+String myString = "";
 Serial myPort;  // The serial port
 
-// output into debug file
-PrintWriter output;
+ArrayList<String> RGB_values;
+
+int[] slots = {156, 135, 118, 100, 78, 57};
+int slot = 0;
+
+// pellet config
+ArrayList<pellet> pellets;
+int max_pellet_id = 0;
 
 void setup() {
   // List all the available serial ports
@@ -29,16 +35,19 @@ void setup() {
   myPort.write(10);
   myString = myPort.readStringUntil(lf);
   println("INIT: " + myString); */
-  myString = null;
+  myString = "";
+  
+  // initialize RGB values ArrayList
+  RGB_values = new ArrayList<String>();
+
+  // initialize pellets and read config file
+  pellets = new ArrayList<pellet>();
+  read_pellet_colors();
   
   state = 0;
   m = millis();
   
   size(200, 200);
-
-  String now_formatted = nf(year(), 4) + "-" + nf(month(), 2) + "-" + nf(day(), 2) + "_" + nf(hour(), 2) + "-" + nf(minute(), 2) + "-" + nf(second(), 2);
-  println("now_formatted: " + now_formatted);
-  output = createWriter("../RGB_read_" + now_formatted + ".csv");
 }
 
 int m = millis();
@@ -60,52 +69,56 @@ void draw() {
     send = 1;
   } else {
     if (send == 0) {
-      if(last_RGB > 0)
-        cmd[pos_cmd] = "c150";
-      else
-        cmd[pos_cmd] = "c100";
-        
+      if(state == pos_cmd) {
+        cmd[pos_cmd] = "c" + slots[last_RGB];
+        slot = slot + 1;
+        if (slot >= slots.length)
+          slot = 0;
+      }
+      
       myPort.write(cmd[state]);
       myPort.write(10);
       println("OUT: " + cmd[state]);
       send = 1;
     }
   }
+  
+  
 }
 
 
 void serialEvent(Serial p) { 
-//  inString = p.readString(); 
-    myString = myPort.readStringUntil(lf);
-    if ((myString != null) && (myString.charAt(0) == 'k')) {
-      myString = trim(myString);
-      println("IN : " + myString);
+  myString = p.readStringUntil(10); 
+    
+  if ((myString != null) && (myString.charAt(0) == 'k')) {
+    myString = trim(myString);
+    println("IN : " + myString);
 
-      String[] q = splitTokens(myString, ";");
-      if(q[1].equals("r"))
-        last_RGB = show_RGB(myString);
-        
-      // continue or wait?
-      /*if (state == 1)
-        send = 2;
-      else
-        send = 0;*/
-
-      send = 0;
+    String[] q = splitTokens(myString, ";");
+    if(q[1].equals("r"))
+      last_RGB = show_RGB(myString);
       
-      if(q[1].equals("a")) {
-        println("a found");
-        if (q[2].equals("1")) {
-          println("1 found");
-          state++;
-        }
-      } else {
+    // continue or wait?
+    /*if (state == 1)
+      send = 2;
+    else
+      send = 0;*/
+
+    send = 0;
+    
+    if(q[1].equals("a")) {
+      if (q[2].equals("1")) {
         state++;
       }
-      
-      if (state >= cmd.length)
-        state = 1;
+    } else {
+      state++;
     }
+        
+    if (state >= cmd.length)
+      state = 1;
+      
+    myString = "";
+  }
 }
 
 
@@ -113,8 +126,23 @@ void keyPressed() {
   if (send == 2)
     send = 0;
   if (keyCode == ESC) {
-    output.flush();  // Writes the remaining data to the file
-    output.close();  // Finishes the file
+    if (RGB_values.size() > 0) {
+      String now_formatted = nf(year(), 4) + "-" + nf(month(), 2) + "-" + nf(day(), 2) + "_" + nf(hour(), 2) + "-" + nf(minute(), 2) + "-" + nf(second(), 2);
+      println("now_formatted: " + now_formatted);
+      String CSV_file = "../RGB_read_" + now_formatted + ".csv";
+      println("CSV_file: " + CSV_file);
+  
+      // output into debug file
+      PrintWriter output;
+      output = createWriter(CSV_file);
+      for (int i = 0; i < RGB_values.size(); i++)
+        output.println(RGB_values.get(i));
+
+      output.flush();  // Writes the remaining data to the file
+      output.close();  // Finishes the file
+      println("Wrote " + (RGB_values.size() + 1) + " RGB values to CSV file" + CSV_file);
+    } else
+      println("No RGB values to write to CSV file");
     exit();  // Stops the program
   }
 }
@@ -147,13 +175,15 @@ int show_RGB(String myString) {
   text(R, 110, 32);
   text(G, 110, 64);
   text(B, 110, 96);
-  
+
+/*  
   textSize(20);
   text(int((R * 100) / max_RGB) + "%", 190, 32);
   text(int((G * 100) / max_RGB) + "%", 190, 64);
   text(int((B * 100) / max_RGB) + "%", 190, 96);
-  
-  output.println(R + ";" + G + ";" + B + ";");
+*/
+
+  RGB_values.add(new String(R + ";" + G + ";" + B + ";"));
   
   int val = 0;
   
@@ -162,8 +192,49 @@ int show_RGB(String myString) {
   if ((R > 800) && (G > 800) && (B > 800))
     val = 1;
  
+  // normalization to max. read value
+  float m = max(50, max(R, max(G, B)));
   
-  text(val, 190, 128);
+  int qcolor = 0;
+  float nR = 0, nG = 0, nB = 0;
   
-  return(val);
+  if (m > 0) {
+    nR = 255 * R / m;
+    nG = 255 * G / m;
+    nB = 255 * B / m;
+  }  
+
+  textSize(20);
+  text(int(nR), 190, 32);
+  text(int(nG), 190, 64);
+  text(int(nB), 190, 96);
+
+ 
+  int best_id = 0;
+  pellet pixel = new pellet(nR, nG, nB);
+  
+  best_id = euclidian_color_match(pixel);      
+ 
+  text(pellets.get(best_id).name, 190, 128);
+  
+  return(best_id);
 }
+
+
+int euclidian_color_match(pellet p) {
+  float dist = 10000, dist_t;
+  int best_id = 0;
+
+  for (int i = 0; i < max_pellet_id; i ++) {
+    if (pellets.get(i).enabled) {
+      dist_t = p.euclidian_distance(pellets.get(i));
+      if (dist_t < dist) {
+        best_id = i;
+        dist = dist_t;
+      }
+    }
+  }
+  return (best_id);
+}
+
+

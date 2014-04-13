@@ -66,12 +66,29 @@ module arrow(R, G, B) {
 			cylinder(r1 = 5, r2 = 0, h = head, center=true);
 }
 
+
 module line() {
 	len = 255;
 
 	translate([0, 0, len / 2])
 		color([.5,, .5, .5])
 			cylinder(r = .33, h = len, center=true);
+}
+
+
+// markers will be moved to -128...
+module marker(x, y, z) {
+	len = 32;
+
+	translate([x - 128, y - 128, z - 128]) {
+		color([0,0,0, .33]) {
+			cylinder(r = .33, h = len, center=true);
+			rotate([-90, 0, 0]) cylinder(r = .33, h = len, center=true);
+			rotate([0, 90, 0])  cylinder(r = .33, h = len, center=true);
+		}
+		color([1, 1, 1, .1])
+			sphere(r=30, center=true);
+	}
 }
 
 
@@ -346,3 +363,10 @@ dot(245.0, 1.0, 0.0, [0.8862745, 0.023529412, 0.007843138]);
 dot(246.0, 246.0, 211.0, [0.9647059, 0.9647059, 0.8509804]);
 dot(13.0, 25.0, 74.0, [0.0627451, 0.10980392, 0.29803923]);
 dot(0.0, 0.0, 0.0, [0.0, 0.0, 0.0]);
+marker(0, 0, 0);
+marker(16, 28, 76);
+marker(5, 109, 3);
+marker(244, 4, 2);
+marker(245, 238, 14);
+marker(246, 246, 217);
+marker(60, 36, 16);

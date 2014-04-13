@@ -3,49 +3,50 @@
 // coordinate system
 
 
-// X = R
-rotate([0, 90, 0])
-	arrow(1, 0, 0);
-
-// Y = G
-rotate([-90, 0, 0])
-	arrow(0, 1, 0);
-
-// Z = B
-	arrow(0, 0, 1);
-
-
-// cube lines 255x255x255
-// 3 vertiacal lines
-translate([255, 0, 0])
-	line();
-translate([255, 255, 0])
-	line();
-translate([0, 255, 0])
-	line();
-
-// 2 bottom lines
-translate([0, 255, 0])
+translate([-128, -128, -128]) {
+	// X = R
 	rotate([0, 90, 0])
-		line();
-translate([255, 0, 0])
+		arrow(1, 0, 0);
+	
+	// Y = G
 	rotate([-90, 0, 0])
+		arrow(0, 1, 0);
+	
+	// Z = B
+		arrow(0, 0, 1);
+	
+	
+	// cube lines 255x255x255
+	// 3 vertiacal lines
+	translate([255, 0, 0])
 		line();
-
-// 4 top lines
-translate([0, 0, 255])
-	rotate([0, 90, 0])
+	translate([255, 255, 0])
 		line();
-translate([0, 255, 255])
-	rotate([0, 90, 0])
+	translate([0, 255, 0])
 		line();
-translate([0, 0, 255])
-	rotate([-90, 0, 0])
-		line();
-translate([255, 0, 255])
-	rotate([-90, 0, 0])
-		line();
-
+	
+	// 2 bottom lines
+	translate([0, 255, 0])
+		rotate([0, 90, 0])
+			line();
+	translate([255, 0, 0])
+		rotate([-90, 0, 0])
+			line();
+	
+	// 4 top lines
+	translate([0, 0, 255])
+		rotate([0, 90, 0])
+			line();
+	translate([0, 255, 255])
+		rotate([0, 90, 0])
+			line();
+	translate([0, 0, 255])
+		rotate([-90, 0, 0])
+			line();
+	translate([255, 0, 255])
+		rotate([-90, 0, 0])
+			line();
+}
 
 // ====================================================
 // sub-modules
@@ -74,12 +75,13 @@ module line() {
 }
 
 
+// dots will be moved to -128...
 module dot(x, y, z, c) {
 	len = 3.33;
 
-	translate([x, y, z])
+	translate([x - 128, y - 128, z - 128])
 		color(c)
-			sphere(r = len/2, center=true);
+			sphere(r = len/2, $fn = 12, center=true);
 }
 
 

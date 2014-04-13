@@ -15,7 +15,7 @@ pellet[] stats;
 
 
 void setup () {
-  size(1000, 600);
+  size(1000, 640);
   background (64);
 
   pellets = new ArrayList<pellet>();
@@ -39,7 +39,7 @@ void setup () {
 
 
   int x = 0, y = 0;
-  int p_width = 50;
+  int p_width = 48;
   int p_inner = p_width - 1;
 
   textSize(9);

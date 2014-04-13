@@ -1,0 +1,20 @@
+h 180
+l 60
+
+h 44
+l 160
+
+-------------------------------------------------------------------------------
+
+* **h** - move upper servo
+* **l** - move lower servo
+* **c** - move servos combined
+* **o** - set offset
+* **d** - set delay
+
+    if ((millis() - m) > 300) {
+      println("read attempt ...");
+      myPort.write('r');
+      myPort.write(10);
+      m = millis();
+    }   

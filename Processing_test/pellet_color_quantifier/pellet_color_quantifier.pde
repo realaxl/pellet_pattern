@@ -1,14 +1,18 @@
 //
 // pellet sorter
 // color quantification of RGB measures
+// 2014-04-13
 //
 
 String CSV_file = "RGB_values.csv";
 
-
-
+// pellet config from XML
 ArrayList<pellet> pellets;
 int max_pellet_id = 0;
+
+// statistics
+pellet[] stats; 
+
 
 void setup () {
   size(1000, 600);
@@ -18,9 +22,15 @@ void setup () {
   read_pellet_colors();
   
   String lines[] = loadStrings(CSV_file);
-  println("there are " + lines.length + " lines");
-  for (int i = 0 ; i < lines.length; i++) {
-    println(lines[i]);
+  println("CSV file: Read " + lines.length + " lines (some may be comments, first character = #)");
+  /*for (int i = 0 ; i < lines.length; i++)
+    println(lines[i]);*/
+
+  stats = new pellet[pellets.size()];
+  
+  for (int i = 0 ; i < stats.length; i++) {
+    stats[i] = new pellet(0, 0, 0);
+    stats[i].id = 0;
   }
   
   int x = 0, y = 0;
@@ -32,23 +42,20 @@ void setup () {
   
   for (int i = 0; i < lines.length; i ++) {
     if (lines[i].charAt(0) != '#') {
+      // values come ';'-separated and in range 0 ... 1024 (10 bit)
       String[] q = splitTokens(lines[i], ";");
       float R = int(q[0]) / 4;
       float G = int(q[1]) / 4;
       float B = int(q[2]) / 4;
 
+      // rectangle
       stroke(64);
       fill(R, G, B);
       rect(x, y, p_inner, p_inner);
       
-      noStroke();
-      if (R + G + B < 300)
-        fill(255);
-      else
-        fill(0);
             
       // normalization to max. read value
-      float m = max(R, max(G, B));
+      float m = max(50, max(R, max(G, B)));
       
       int qcolor = 0;
       float nR = 0, nG = 0, nB = 0;
@@ -61,11 +68,19 @@ void setup () {
         nB = 255 * B / m;
       }  
       
+      // text
+      noStroke();
+      if (R + G + B < 300)
+        fill(255);
+      else
+        fill(0);
+
       int ty = y + 6;
       int tx = x + 6;
-      text("R " + nR, tx , ty);
-      text("G " + nG, tx , ty + 10);
-      text("B " + nB, tx , ty + 20);
+      text("R " + R, tx , ty);
+      text("G " + G, tx , ty + 10);
+      text("B " + B, tx , ty + 20);
+
       
       int best_id = 0;
       pellet pixel = new pellet(nR, nG, nB);
@@ -74,6 +89,12 @@ void setup () {
 
       text(pellets.get(best_id).name, tx , ty + 35);
       
+      // statistics
+      stats[best_id].id ++; // id is hijacked as counter
+      stats[best_id].RGB[0] += R; // sum red
+      stats[best_id].RGB[1] += G; // sum red
+      stats[best_id].RGB[2] += B; // sum red
+
       
       x = x + p_width;
       if (x > width) {
@@ -82,6 +103,23 @@ void setup () {
       }
     }
   }
+  
+  
+ for (int i = 0; i < pellets.size(); i ++) {
+     print(pellets.get(i).name + ";");
+     print(stats[i].id + ";");
+     print(nf(stats[i].RGB[0], 1, 0) + ";");
+     print(stats[i].RGB[0] + ";");
+    
+     println();
+  }
+}
+
+
+String align_right(String s, int a) {
+  while (s.length() < a)
+    s = " " + s;
+  return(s);
 }
 
 

@@ -121,6 +121,7 @@ void setup () {
         y = y + p_width;
       }
     } else {
+      // OpenSCAD export file
       scad = expand (scad, scad.length + 1);
       scad[scad.length - 1] = "// " + lines[i];
     }
@@ -132,9 +133,16 @@ void setup () {
     print(align_right(pellets.get(i).name, 20));
     print(align_right(stats[i].id + "", 8));
     if (stats[i].id > 0) {
-      print(align_right(int(stats[i].RGB[0] / stats[i].id) + "", 8));
-      print(align_right(int(stats[i].RGB[1] / stats[i].id) + "", 8));
-      print(align_right(int(stats[i].RGB[2] / stats[i].id) + "", 8));
+      int sR = int(stats[i].RGB[0] / stats[i].id);
+      int sG = int(stats[i].RGB[1] / stats[i].id);
+      int sB = int(stats[i].RGB[2] / stats[i].id);
+      
+      print(align_right(sR + "", 8));
+      print(align_right(sG + "", 8));
+      print(align_right(sB + "", 8));
+      // OpenSCAD export file
+      scad = expand (scad, scad.length + 1);
+      scad[scad.length - 1] = "marker(" + sR +  ", " + sG + ", " + sB + ");";
     }    
     println();
   }

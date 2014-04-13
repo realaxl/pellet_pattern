@@ -48,7 +48,7 @@ void setup () {
         fill(0);
             
       // normalization to max. read value
-      float m = max(R, max(G, B));
+      float m = max(50, max(R, max(G, B)));
       
       int qcolor = 0;
       float nR = 0, nG = 0, nB = 0;

@@ -17,29 +17,29 @@ pellet[] stats;
 void setup () {
   size(1000, 600);
   background (64);
-  
+
   pellets = new ArrayList<pellet>();
   read_pellet_colors();
-  
+
   String lines[] = loadStrings(CSV_file);
   println("CSV file: Read " + lines.length + " lines (some may be comments, first character = #)");
   /*for (int i = 0 ; i < lines.length; i++)
-    println(lines[i]);*/
+   println(lines[i]);*/
 
   stats = new pellet[pellets.size()];
-  
+
   for (int i = 0 ; i < stats.length; i++) {
     stats[i] = new pellet(0, 0, 0);
     stats[i].id = 0;
   }
-  
+
   int x = 0, y = 0;
   int p_width = 50;
   int p_inner = p_width - 1;
-  
+
   textSize(9);
   textAlign(LEFT, CENTER);
-  
+
   for (int i = 0; i < lines.length; i ++) {
     if (lines[i].charAt(0) != '#') {
       // values come ';'-separated and in range 0 ... 1024 (10 bit)
@@ -52,22 +52,23 @@ void setup () {
       stroke(64);
       fill(R, G, B);
       rect(x, y, p_inner, p_inner);
-      
-            
+
+
       // normalization to max. read value
       float m = max(50, max(R, max(G, B)));
-      
+
       int qcolor = 0;
       float nR = 0, nG = 0, nB = 0;
-      
+
       if (m == 0) {
         qcolor = 0;
-      } else {
+      } 
+      else {
         nR = 255 * R / m;
         nG = 255 * G / m;
         nB = 255 * B / m;
       }  
-      
+
       // text
       noStroke();
       if (R + G + B < 300)
@@ -75,27 +76,31 @@ void setup () {
       else
         fill(0);
 
-      int ty = y + 6;
-      int tx = x + 6;
-      text("R " + R, tx , ty);
-      text("G " + G, tx , ty + 10);
-      text("B " + B, tx , ty + 20);
+      int ty = y + 5;
+      int tx = x + 3;
+      text("R " + int(R), tx, ty);
+      text("G " + int(G), tx, ty + 10);
+      text("B " + int(B), tx, ty + 20);
 
-      
       int best_id = 0;
       pellet pixel = new pellet(nR, nG, nB);
-      
+
       best_id = euclidian_color_match(pixel);      
 
-      text(pellets.get(best_id).name, tx , ty + 35);
-      
+      text(pellets.get(best_id).name, tx, ty + 35);
+
+      fill(pellets.get(best_id).get_color());
+      rect(x + p_inner - 12, y + 1, 12, p_inner - 2);
+
+
+
       // statistics
       stats[best_id].id ++; // id is hijacked as counter
       stats[best_id].RGB[0] += R; // sum red
       stats[best_id].RGB[1] += G; // sum red
       stats[best_id].RGB[2] += B; // sum red
 
-      
+
       x = x + p_width;
       if (x > width) {
         x = 0;
@@ -103,21 +108,24 @@ void setup () {
       }
     }
   }
-  
-  
- for (int i = 0; i < pellets.size(); i ++) {
-     print(pellets.get(i).name + ";");
-     print(stats[i].id + ";");
-     print(nf(stats[i].RGB[0], 1, 0) + ";");
-     print(stats[i].RGB[0] + ";");
-    
-     println();
+
+
+  for (int i = 0; i < pellets.size(); i ++) {
+    print(align_right(pellets.get(i).name, 20));
+    print(align_right(stats[i].id + "", 8));
+    if (stats[i].id > 0) {
+      print(align_right(int(stats[i].RGB[0] / stats[i].id) + "", 8));
+      print(align_right(int(stats[i].RGB[1] / stats[i].id) + "", 8));
+      print(align_right(int(stats[i].RGB[2] / stats[i].id) + "", 8));
+    }    
+    println();
   }
 }
 
 
 String align_right(String s, int a) {
-  while (s.length() < a)
+  s += ";";
+  while (s.length () < a)
     s = " " + s;
   return(s);
 }
@@ -156,48 +164,48 @@ class pellet {
   String name;
   color screen_color;
   char symbol;
-  
+
   pellet(float iR, float iG, float iB) {
     RGB[0] = iR;
     RGB[1] = iG;
     RGB[2] = iB;
-    
+
     enabled = true;
-//    name = "";
+    //    name = "";
     screen_color = color(RGB[0], RGB[1], RGB[2]);
   }
-  
+
   void set_RGB(float iR, float iG, float iB) {
     RGB[0] = iR;
     RGB[1] = iG;
     RGB[2] = iB;
   }
-  
+
   void set_color(color col) {
     RGB[0] = red(col);
     RGB[1] = green(col);
     RGB[2] = blue(col);
   }
-  
+
   void set_name(String iname) {
     name = iname;
   }
-  
+
   void set_symbol(char c) {
     symbol = c;
   }
-  
+
   void set_brightness_and_contrast(float brightness, float contrast) {
     for (int i = 0; i < 3; i ++) {
       RGB[i] = 128 + ((RGB[i] - 128) * contrast) + brightness;
     }
   }
-  
+
   float euclidian_distance(pellet p) {
     float dist = sqrt(sq(RGB[0] - p.RGB[0]) + sq(RGB[1] - p.RGB[1]) + sq(RGB[2] - p.RGB[2]));
     return(dist);
   }
-  
+
   color get_color() {
     color c;
     //c = color (max(0, min(255, int(RGB[0]))), max(0, min(255, int(RGB[1]))), max(0, min(255, int(RGB[2]))));
@@ -210,7 +218,7 @@ class pellet {
     for (int i = 0; i < 3; i ++)
       RGB[i] += p.RGB[i];
   }
-  
+
   void enable() {
     enabled = true;
   } 
@@ -221,7 +229,7 @@ class pellet {
 
   void toggle() {
     enabled = !enabled;
-  } 
+  }
 }
 
 
@@ -241,7 +249,7 @@ void read_pellet_colors() {
   XML[] palette = xml.getChildren("palette");
   String palette_name = palette[0].getContent();
   println(palette_name);
-  
+
   XML[] children = xml.getChildren("pellet");
 
   for (int i = 0; i < children.length; i++) {
@@ -252,18 +260,18 @@ void read_pellet_colors() {
     int blue    = get_pellet_byte(children[i].getString("blue"));
     String name = children[i].getContent();
     char symbol = children[i].getString("symbol").charAt(0);
-    
+
     pellets.add(new pellet(red, green, blue));
-  
+
     // color display name 
     pellets.get(max_pellet_id).set_name(name);
     pellets.get(max_pellet_id).set_symbol(symbol);
-    
+
     if (enable == 0)
       pellets.get(max_pellet_id).disable();
 
     println(id + " " + hex(red)+ " " + hex(green)+ " " + hex(blue) + " / "+ name + "(" + symbol + ")");
-      
+
     max_pellet_id ++;
   }
 }
@@ -272,7 +280,7 @@ void read_pellet_colors() {
 // get XML parameter --> 1 unsigned byte, supports $xx hex format
 int get_pellet_byte(String s) {
   int i = 0;
-  
+
   if (s.length() > 0) {
     if (s.charAt(0) == '$')
       i = unhex(s.substring(1));
@@ -284,3 +292,4 @@ int get_pellet_byte(String s) {
   }    
   return (i);
 }
+

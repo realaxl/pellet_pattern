@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <pellet_colors>
 	<palette>Dimmed Airgun Pellets</palette>
-	<pellet id="0" enable="1" red="$00" green="$00" blue="$00" symbol="#" screen_color="#000000">Black</pellet>
-	<pellet id="1" enable="1" red="$00" green="$00" blue="$A0" symbol="B" screen_color="#0000A0">Blue</pellet>
-	<pellet id="2" enable="1" red="$00" green="$A0" blue="$00" symbol="G" screen_color="#00A000">Green</pellet>
-	<pellet id="3" enable="1" red="$C0" green="$00" blue="$00" symbol="R" screen_color="#C00000">Red</pellet>
-	<pellet id="4" enable="1" red="$FF" green="$FF" blue="$00" symbol="Y" screen_color="#FFFF00">Yellow</pellet>
-	<pellet id="5" enable="1" red="$FF" green="$FF" blue="$FF" symbol="." screen_color="#FFFFFF">White</pellet>
-	<pellet id="6" enable="0" red="$C0" green="$C0" blue="$C0" symbol="-" screen_color="#666666">Grey</pellet>
+	<pellet id="0" enable="1" red="0"   green="0"   blue="0"   symbol="#" screen_color="#000000">Black</pellet>
+	<pellet id="1" enable="1" red="16"  green="28"  blue="76"  symbol="B" screen_color="#0000A0">Blue</pellet>
+	<pellet id="2" enable="1" red="5"   green="109" blue="3"   symbol="G" screen_color="#00A000">Green</pellet>
+	<pellet id="3" enable="1" red="226" green="6"   blue="2"   symbol="R" screen_color="#C00000">Red</pellet>
+	<pellet id="4" enable="1" red="188" green="175" blue="16"  symbol="Y" screen_color="#FFFF00">Yellow</pellet>
+	<pellet id="5" enable="1" red="246" green="246" blue="217" symbol="." screen_color="#FFFFFF">White</pellet>
+	<pellet id="6" enable="1" red="61"  green="37"  blue="17"  symbol="-" screen_color="#666666">Grey</pellet>
 </pellet_colors>

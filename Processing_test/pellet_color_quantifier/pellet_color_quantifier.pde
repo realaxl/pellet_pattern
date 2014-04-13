@@ -33,6 +33,11 @@ void setup () {
     stats[i].id = 0;
   }
 
+  // OpenSCAD export file
+  String scad[] = loadStrings("3D_diagram_template.scad");
+  int scad_custom = scad.length;
+
+
   int x = 0, y = 0;
   int p_width = 50;
   int p_inner = p_width - 1;
@@ -55,7 +60,7 @@ void setup () {
 
 
       // normalization to max. read value
-      float m = max(50, max(R, max(G, B)));
+      float m = max(10, max(R, max(G, B)));
 
       int qcolor = 0;
       float nR = 0, nG = 0, nB = 0;
@@ -83,7 +88,7 @@ void setup () {
       text("B " + int(B), tx, ty + 20);
 
       int best_id = 0;
-      pellet pixel = new pellet(nR, nG, nB);
+      pellet pixel = new pellet(R, G, B);
 
       best_id = euclidian_color_match(pixel);      
 
@@ -92,6 +97,15 @@ void setup () {
       fill(pellets.get(best_id).get_color());
       rect(x + p_inner - 12, y + 1, 12, p_inner - 2);
 
+
+      // OpenSCAD export file
+      String scad_accu = "dot(" + R + ", " + G + ", " + B + ", ";
+      scad_accu += "[" + pellets.get(best_id).RGB[0] / 255 + ", "; 
+      scad_accu +=       pellets.get(best_id).RGB[1] / 255 + ", "; 
+      scad_accu +=       pellets.get(best_id).RGB[2] / 255 + "]);"; 
+
+      scad = expand (scad, scad.length + 1);
+      scad[scad.length - 1] = scad_accu;
 
 
       // statistics
@@ -106,10 +120,14 @@ void setup () {
         x = 0;
         y = y + p_width;
       }
+    } else {
+      scad = expand (scad, scad.length + 1);
+      scad[scad.length - 1] = "// " + lines[i];
     }
   }
 
 
+  // statistics
   for (int i = 0; i < pellets.size(); i ++) {
     print(align_right(pellets.get(i).name, 20));
     print(align_right(stats[i].id + "", 8));
@@ -120,6 +138,10 @@ void setup () {
     }    
     println();
   }
+  
+  
+  // OpenSCAD export file
+  saveStrings("data/3D_diagram.scad", scad);
 }
 
 

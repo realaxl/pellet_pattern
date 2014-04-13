@@ -1,0 +1,10 @@
+normalized to 0 ... 255 --- results
+
+CSV file: Read 257 lines (some may be comments, first character = #)
+              Black;     57;      0;      0;      0;
+               Blue;     30;     16;     28;     76;
+              Green;     29;      5;    109;      3;
+                Red;     33;    226;      6;      2;
+             Yellow;     44;    188;    175;     16;
+              White;     60;    246;    246;    217;
+               Grey;      1;      2;      0;      0;

@@ -102,7 +102,9 @@ void setup () {
       String scad_accu = "dot(" + R + ", " + G + ", " + B + ", ";
       scad_accu += "[" + pellets.get(best_id).RGB[0] / 255 + ", "; 
       scad_accu +=       pellets.get(best_id).RGB[1] / 255 + ", "; 
-      scad_accu +=       pellets.get(best_id).RGB[2] / 255 + "]);"; 
+      scad_accu +=       pellets.get(best_id).RGB[2] / 255 + "]);";
+      
+      scad_accu += " // " + i + " (" + pellets.get(best_id).name + ")"; 
 
       scad = expand (scad, scad.length + 1);
       scad[scad.length - 1] = scad_accu;
@@ -142,7 +144,7 @@ void setup () {
       print(align_right(sB + "", 8));
       // OpenSCAD export file
       scad = expand (scad, scad.length + 1);
-      scad[scad.length - 1] = "marker(" + sR +  ", " + sG + ", " + sB + ");";
+      scad[scad.length - 1] = "marker(" + sR +  ", " + sG + ", " + sB + "); // " + pellets.get(i).name;
     }    
     println();
   }

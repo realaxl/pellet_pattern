@@ -86,7 +86,7 @@ module marker(x, y, z) {
 			rotate([-90, 0, 0]) cylinder(r = .33, h = len, center=true);
 			rotate([0, 90, 0])  cylinder(r = .33, h = len, center=true);
 		}
-		color([1, 1, 1, .1])
+		color([1, 1, 1, .2])
 			sphere(r=30, center=true);
 	}
 }

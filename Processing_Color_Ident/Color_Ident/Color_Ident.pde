@@ -16,7 +16,7 @@ Serial myPort;  // The serial port
 
 ArrayList<String> RGB_values;
 
-int[] slots = {156, 135, 118, 100, 78, 57};
+int[] slots = {156, 133, 118, 100, 78, 57};
 int slot = 0;
 
 // pellet config

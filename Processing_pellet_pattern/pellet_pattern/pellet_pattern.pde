@@ -284,8 +284,8 @@ void render_pellets(String filename) {
   }
   
   XML pellet_XML = null;
-  pellet_XML.setName("pellet_pattern");
-  pellet_XML.setContent(XML_string);
+  //pellet_XML.setName("pellet_pattern");
+  //pellet_XML.setContent(XML_string);
   
   stat_pellet_sum = 0;
   for (int i = 0; i < max_pellet_id; i ++)

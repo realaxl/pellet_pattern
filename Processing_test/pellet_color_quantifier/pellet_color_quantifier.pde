@@ -99,10 +99,14 @@ void setup () {
 
 
       // OpenSCAD export file
-      String scad_accu = "dot(" + R + ", " + G + ", " + B + ", ";
-      scad_accu += "[" + pellets.get(best_id).RGB[0] / 255 + ", "; 
-      scad_accu +=       pellets.get(best_id).RGB[1] / 255 + ", "; 
-      scad_accu +=       pellets.get(best_id).RGB[2] / 255 + "]);";
+      color t_color = color(R, G, B);
+
+      // RGB color space
+      String scad_accu = "dot(" + scad_tuple_int(R, G, B) + ", ";
+      // HSV color space
+      // String scad_accu = "dot(" + scad_tuple_int(hue(t_color), saturation(t_color), brightness(t_color)) + ", ";
+
+      scad_accu += "[" + scad_tuple_color(pellets.get(best_id).RGB[0], pellets.get(best_id).RGB[1], pellets.get(best_id).RGB[2]) + "]);";
       
       scad_accu += " // " + i + " (" + pellets.get(best_id).name + ")"; 
 
@@ -144,7 +148,7 @@ void setup () {
       print(align_right(sB + "", 8));
       // OpenSCAD export file
       scad = expand (scad, scad.length + 1);
-      scad[scad.length - 1] = "marker(" + sR +  ", " + sG + ", " + sB + "); // " + pellets.get(i).name;
+      scad[scad.length - 1] = "marker(" + scad_tuple_int((float) sR,  (float) sG, (float) sB) + "); // " + pellets.get(i).name;
     }    
     println();
   }
@@ -162,7 +166,22 @@ String align_right(String s, int a) {
   return(s);
 }
 
+// OpenSCAD export file - nicer number formats
+String scad_tuple_int(float f1, float f2, float f3) {
+  return(int_nfp(f1) + ", " + int_nfp(f2) + ", " + int_nfp(f3));
+}
 
+String scad_tuple_color(float f1, float f2, float f3) {
+  return(dot_nfp(f1 / 255) + ", " + dot_nfp(f2 / 255) + ", " + dot_nfp(f3 / 255));
+}
+
+String dot_nfp(float f) {
+  return(nfp(f, 1, 3).replaceAll(",", "."));
+}
+
+String int_nfp(float f) {
+  return(nfp(int(f), 3));
+}
 
 // closest distance to color
 int euclidian_color_match(pellet p) {

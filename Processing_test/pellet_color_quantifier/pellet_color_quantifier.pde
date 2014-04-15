@@ -47,13 +47,13 @@ void setup () {
 
   for (int i = 0; i < lines.length; i ++) {
     if (lines[i].charAt(0) != '#') {
-      // values come ';'-separated and in range 0 ... 1024 (10 bit)
+      // values received are ';'-separated and in range 0 ... 1024 (10 bit)
       String[] q = splitTokens(lines[i], ";");
       float R = int(q[0]) / 4;
       float G = int(q[1]) / 4;
       float B = int(q[2]) / 4;
 
-      // rectangle
+      // draw rectangle
       stroke(64);
       fill(R, G, B);
       rect(x, y, p_inner, p_inner);
@@ -74,7 +74,7 @@ void setup () {
         nB = 255 * B / m;
       }  
 
-      // text
+      // text (black or white)
       noStroke();
       if (R + G + B < 300)
         fill(255);
@@ -107,27 +107,28 @@ void setup () {
       // String scad_accu = "dot(" + scad_tuple_int(hue(t_color), saturation(t_color), brightness(t_color)) + ", ";
 
       scad_accu += "[" + scad_tuple_color(pellets.get(best_id).RGB[0], pellets.get(best_id).RGB[1], pellets.get(best_id).RGB[2]) + "]);";
-      
       scad_accu += " // " + i + " (" + pellets.get(best_id).name + ")"; 
 
+      // add a new element to the array
       scad = expand (scad, scad.length + 1);
       scad[scad.length - 1] = scad_accu;
 
 
-      // statistics
+      // collect statistics
       stats[best_id].id ++; // id is hijacked as counter
       stats[best_id].RGB[0] += R; // sum red
       stats[best_id].RGB[1] += G; // sum red
       stats[best_id].RGB[2] += B; // sum red
 
 
+      // get next coordinates
       x = x + p_width;
       if (x > width) {
         x = 0;
         y = y + p_width;
       }
     } else {
-      // OpenSCAD export file
+      // OpenSCAD export file - comment, only
       scad = expand (scad, scad.length + 1);
       scad[scad.length - 1] = "// " + lines[i];
     }
@@ -146,15 +147,16 @@ void setup () {
       print(align_right(sR + "", 8));
       print(align_right(sG + "", 8));
       print(align_right(sB + "", 8));
-      // OpenSCAD export file
+      
+      // OpenSCAD export file - write marker pos
       scad = expand (scad, scad.length + 1);
       scad[scad.length - 1] = "marker(" + scad_tuple_int((float) sR,  (float) sG, (float) sB) + "); // " + pellets.get(i).name;
-    }    
+    }
     println();
   }
   
   
-  // OpenSCAD export file
+  // OpenSCAD - write to export file
   saveStrings("data/3D_diagram.scad", scad);
 }
 
@@ -171,6 +173,7 @@ String scad_tuple_int(float f1, float f2, float f3) {
   return(int_nfp(f1) + ", " + int_nfp(f2) + ", " + int_nfp(f3));
 }
 
+// scale colors down to range 0 ... 1 (OpenSCAD)
 String scad_tuple_color(float f1, float f2, float f3) {
   return(dot_nfp(f1 / 255) + ", " + dot_nfp(f2 / 255) + ", " + dot_nfp(f3 / 255));
 }
@@ -182,6 +185,7 @@ String dot_nfp(float f) {
 String int_nfp(float f) {
   return(nfp(int(f), 3));
 }
+
 
 // closest distance to color
 int euclidian_color_match(pellet p) {

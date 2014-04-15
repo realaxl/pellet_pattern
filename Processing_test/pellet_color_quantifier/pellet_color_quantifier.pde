@@ -163,6 +163,8 @@ String align_right(String s, int a) {
 }
 
 
+
+// closest distance to color
 int euclidian_color_match(pellet p) {
   float dist = 10000, dist_t;
   int best_id = 0;

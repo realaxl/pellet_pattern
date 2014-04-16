@@ -22,7 +22,9 @@ void setup () {
   read_pellet_colors();
 
   String lines[] = loadStrings(CSV_file);
-  println("CSV file: Read " + lines.length + " lines (some may be comments, first character = #)");
+  println();
+  println();
+  println("CSV file: Read " + lines.length + " lines (some may be # comments)");
   /*for (int i = 0 ; i < lines.length; i++)
    println(lines[i]);*/
 
@@ -136,8 +138,17 @@ void setup () {
 
 
   // statistics
+  println();
+  println();
+  println("# STATISTICS");
+
+  int max_name_len = pellets.get(0).name.length();
+  for (int i = 1; i < pellets.size(); i ++)
+    max_name_len = max(max_name_len, pellets.get(i).name.length());
+  max_name_len += 2;
+
   for (int i = 0; i < pellets.size(); i ++) {
-    print(align_right(pellets.get(i).name, 20));
+    print(align_right(pellets.get(i).name, max_name_len));
     print(align_right(stats[i].id + "", 8));
     if (stats[i].id > 0) {
       int sR = int(stats[i].RGB[0] / stats[i].id);
@@ -154,7 +165,34 @@ void setup () {
     }
     println();
   }
+
+
+  // DISTANCES
+  println();
+  println();
+  println("# DISTANCES");
   
+  float min_distance = sqrt(3 * sq(255)); // theoretical max. distance
+  /// headline
+  print(align_right("", max_name_len));
+  for (int i = 0; i < pellets.size(); i ++)
+    print(align_right(pellets.get(i).name, max_name_len));
+  println();
+
+  for (int iy = 0; iy < pellets.size(); iy ++) {
+    print(align_right(pellets.get(iy).name, max_name_len));
+    for (int ix = 0; ix < pellets.size(); ix ++) {
+      float d = pellets.get(ix).euclidian_distance(pellets.get(iy));
+      print(align_right(int(d) + "", max_name_len));
+      
+      if (ix != iy)
+        min_distance = min(min_distance, d);
+    }
+    println();
+  }
+  println();
+  println("Minimal distance of markers: " + nf(min_distance, 1, 3));
+  println("Quantification radius (proposal): " + nf(int((min_distance - 2) / 2), 1));
   
   // OpenSCAD - write to export file
   saveStrings("data/3D_diagram.scad", scad);

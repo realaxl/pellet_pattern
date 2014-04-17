@@ -112,9 +112,10 @@ void setup () {
       scad_accu += " // " + i + " (" + pellets.get(best_id).name + ")"; 
 
       // add a new element to the array
-      scad = expand (scad, scad.length + 1);
-      scad[scad.length - 1] = scad_accu;
-
+      if(best_id < 6) {
+        scad = expand (scad, scad.length + 1);
+        scad[scad.length - 1] = scad_accu;
+      }
 
       // collect statistics
       stats[best_id].id ++; // id is hijacked as counter

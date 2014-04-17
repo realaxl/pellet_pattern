@@ -2,7 +2,7 @@ Pellet Rendering
 ================
 
 An approach to render bitmap graphics into the limited color space of airgun pellets.
-Airgun pellets are available in various colors. The set initially used had pellets in black, blue, green,red, yellow, grey and white. 
+[Airsoft Pellets](http://en.wikipedia.org/wiki/Airsoft_pellets) are available in various colors. The set initially used had pellets in black, blue, green,red, yellow, grey and white. 
 
 The pellet diameter is 6 mm.
 
@@ -43,8 +43,8 @@ Color quantification
 
 Examples
 --------
-![Mona Lisa](data/examples/Mona_Lisa_closest_match.png)
-![Spock](data/examples/Spock_B+W.png)
+![Mona Lisa](Pictures/examples/Mona_Lisa_closest_match.png)
+![Spock](Pictures/examples/Spock_B+W.png)
 
 
 Environment

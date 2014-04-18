@@ -1,7 +1,11 @@
-// pellet 3D debug diagram
+// ====================================================
+// pellet color recognition - 3D visualization
+// ====================================================
 
+
+// ====================================================
 // coordinate system
-
+// ====================================================
 
 translate([-128, -128, -128]) {
 	// X = R
@@ -79,6 +83,7 @@ module line() {
 // markers will be moved to -128...
 module marker(x, y, z) {
 	len = 32;
+	sphere_r = 35;
 
 	translate([x - 128, y - 128, z - 128]) {
 		color([0,0,0, .33]) {
@@ -87,7 +92,7 @@ module marker(x, y, z) {
 			rotate([0, 90, 0])  cylinder(r = .33, h = len, center=true);
 		}
 		color([1, 1, 1, .2])
-			sphere(r=30, center=true);
+			sphere(r=sphere_r, center=true);
 	}
 }
 
@@ -103,7 +108,7 @@ module dot(x, y, z, c) {
 
 
 // ====================================================
-// automated content follows
+// automated content from Processing script follows ...
 // ====================================================
 
 // # File: RGB_read_2014-04-07_20-13-15.csv

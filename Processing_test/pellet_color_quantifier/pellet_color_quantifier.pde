@@ -124,7 +124,7 @@ void setup () {
       stats[best_id].RGB[2] += B; // sum red
 
 
-      // get next coordinates
+      // get next screen coordinates
       x = x + p_width;
       if (x > width) {
         x = 0;
@@ -143,10 +143,16 @@ void setup () {
   println();
   println("# STATISTICS");
 
+  // get max. length of color names for screen output
   int max_name_len = pellets.get(0).name.length();
   for (int i = 1; i < pellets.size(); i ++)
     max_name_len = max(max_name_len, pellets.get(i).name.length());
   max_name_len += 2;
+
+
+  XML xml;
+  xml = loadXML("pellet_colors.xml");
+
 
   for (int i = 0; i < pellets.size(); i ++) {
     print(align_right(pellets.get(i).name, max_name_len));
@@ -163,9 +169,19 @@ void setup () {
       // OpenSCAD export file - write marker pos
       scad = expand (scad, scad.length + 1);
       scad[scad.length - 1] = "marker(" + scad_tuple_int((float) sR,  (float) sG, (float) sB) + "); // " + pellets.get(i).name;
+
+      // XML file
+      XML marker = xml.addChild("marker");
+      marker.setContent(pellets.get(i).name);
+      marker.setInt("red",   sR);
+      marker.setInt("green", sG);
+      marker.setInt("blue",  sB);
+
     }
     println();
   }
+
+  saveXML(xml, "pellet_markers.xml");
 
 
   // DISTANCES

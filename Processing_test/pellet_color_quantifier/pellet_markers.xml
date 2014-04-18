@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pellet_colors>
+  <palette>Dimmed Airgun Pellets</palette>
+  <pellet blue="0" enable="1" green="0" id="0" red="0" screen_color="#000000" symbol="#">Black</pellet>
+  <pellet blue="76" enable="1" green="28" id="1" red="16" screen_color="#0000A0" symbol="B">Blue</pellet>
+  <pellet blue="3" enable="1" green="109" id="2" red="5" screen_color="#00A000" symbol="G">Green</pellet>
+  <pellet blue="2" enable="1" green="6" id="3" red="226" screen_color="#C00000" symbol="R">Red</pellet>
+  <pellet blue="16" enable="1" green="175" id="4" red="188" screen_color="#FFFF00" symbol="Y">Yellow</pellet>
+  <pellet blue="217" enable="1" green="246" id="5" red="246" screen_color="#FFFFFF" symbol=".">White</pellet>
+  <pellet blue="17" enable="1" green="37" id="6" red="61" screen_color="#666666" symbol="-">Grey</pellet>
+  <marker blue="0" green="0" red="0">Black</marker>
+  <marker blue="72" green="22" red="11">Blue</marker>
+  <marker blue="2" green="108" red="4">Green</marker>
+  <marker blue="1" green="3" red="243">Red</marker>
+  <marker blue="12" green="228" red="239">Yellow</marker>
+  <marker blue="216" green="245" red="244">White</marker>
+  <marker blue="26" green="42" red="73">Grey</marker>
+</pellet_colors>

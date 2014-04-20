@@ -8,6 +8,8 @@ Inputs
 * XML config file for the pellet colors .
 * Body of OpenSCAD script:<br>`3D_diagram_template.scad`
 
+Test Link: [data/3D_diagram_template.scad](data/3D_diagram_template.scad "3D_diagram_template.scad")
+
 
 Functions
 ---------

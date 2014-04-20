@@ -135,6 +135,7 @@ void keyPressed() {
       // output into debug file
       PrintWriter output;
       output = createWriter(CSV_file);
+      output.println("# " + now_formatted + ".csv"); // 
       for (int i = 0; i < RGB_values.size(); i++)
         output.println(RGB_values.get(i));
 

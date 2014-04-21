@@ -3,7 +3,7 @@ Pellet Color Quantifier
 
 Inputs
 ------
-* **RGB data in CSV file** (separator is accually ;) files:<br>[`RGB_values.csv`](data/RGB_values.csv)
+* **RGB data in CSV file** (separator is accually semicolons ;):<br>[`RGB_values.csv`](data/RGB_values.csv)
 	* Lines beginning with hash (#) symbol are ignored and treated as comments. They might re-appear in the output files as comment lines.
 * **XML config file** for the pellet colors<br>[`pellet_colors.xml`](data/pellet_colors.xml)
 * **Body of OpenSCAD script**:<br>[`3D_diagram_template.scad`](data/3D_diagram_template.scad)
@@ -11,6 +11,7 @@ Inputs
 
 Functions
 ---------
+* 2D screen visualization
 * Finds closest pellet color (minimal euclidian distance)
 * Calculate average position in RGB space per color and save it as a marker.
 
@@ -27,5 +28,15 @@ Outputs
 
 ----------
 
-* Test Link: [data/3D_diagram_template.scad](data/3D_diagram_template.scad "3D_diagram_template.scad")
-* Test Link: 
+Versions
+========
+
+* 2014-04-18 --- added XML output for new markers
+* 2014-04-12 --- added OpenSCAD export / 3D visualization
+
+
+----------
+
+* Test Link:<br>[`data/3D_diagram_template.scad`](data/3D_diagram_template.scad)
+* Test Link:
+* Test Link:

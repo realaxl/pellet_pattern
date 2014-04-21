@@ -181,7 +181,7 @@ void setup () {
     println();
   }
 
-  saveXML(xml, "pellet_markers.xml");
+  saveXML(xml, "data/pellet_markers.xml");
 
 
   // DISTANCES

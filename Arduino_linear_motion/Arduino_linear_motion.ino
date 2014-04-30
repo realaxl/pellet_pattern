@@ -30,12 +30,22 @@ byte val_sig = 1;        // signature
 // program finite state machine
 byte state = 0;
 
+// input read test
+const int buttonPin = 2;     // the number of the pushbutton pin
+const int ledPin =  13;      // the number of the LED pin
+int buttonState = 0;         // variable for reading the pushbutton status
+
+
 void setup()
 {
   // setup the stepper object
   stepper.setMaxSpeed(s_speed);
   stepper.setAcceleration(s_acceleration);
   stepper.moveTo(p);
+  
+  // input read test
+  pinMode(buttonPin, INPUT);
+  pinMode(ledPin, OUTPUT);
 
   // start serial port at 9600 bps and wait for port to open:
   Serial.begin(9600);
@@ -56,6 +66,20 @@ void loop()
       Serial.println(p);
       state = 0;
     }
+  }
+
+
+  buttonState = digitalRead(buttonPin);
+
+  // check if the pushbutton is pressed.
+  // if it is, the buttonState is HIGH:
+  if (buttonState == HIGH) {     
+    // turn LED on:    
+    digitalWrite(ledPin, HIGH);  
+  } 
+  else {
+    // turn LED off:
+    digitalWrite(ledPin, LOW); 
   }
 
   

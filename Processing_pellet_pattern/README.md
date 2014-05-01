@@ -32,7 +32,7 @@ Keyboard
 	* **-** - decrease number of pellets (min. 1x1) 
 	* **+** - increase number of pellets (max. 64x64)
 * *file options*
-	* **w** - write to XML file
+	* **w** - write image to XML file
 
 
 Color quantification

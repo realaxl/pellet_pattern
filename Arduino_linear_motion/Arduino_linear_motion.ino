@@ -25,7 +25,7 @@ float s_acceleration = 800; // steps / sec / sec
 byte inByte = 0;         // incoming serial byte
 byte cmd;                // command (1 character)
 long val;                // value
-byte val_sig = 1;        // signature
+boolean val_sig = true;  // signature
 
 // program finite state machine
 byte state = 0;
@@ -90,7 +90,7 @@ void loop()
     if (inByte >= 'a') {
       cmd = inByte;
       val = 0;
-      val_sig = 1;
+      val_sig = true;
     } else {
       if (inByte == 10)  {
         switch (cmd) {
@@ -113,14 +113,14 @@ void loop()
 
           case 'm': // move to step
             p = val;
-            if (val_sig < 0)
+            if (!val_sig)
               p = -p;
             stepper.moveTo(p);
             state = 1;
             break;
           case 'd': // move to degree
             p = val * 32;
-            if (val_sig < 0)
+            if (!val_sig)
               p = -p;
             stepper.moveTo(p);
             state = 1;
@@ -151,7 +151,7 @@ void loop()
         Serial.write(';');
         Serial.println(p);
       } else {
-        if (inByte == '-') val_sig = -val_sig;
+        if (inByte == '-') val_sig = !val_sig;
         if ((inByte >= '0') && (inByte <= '9')) val = val * 10 + (inByte - '0');
       }
     }

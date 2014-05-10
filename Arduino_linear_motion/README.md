@@ -9,13 +9,14 @@ Arduino_linear_motion
 
 Cable colors
 ------------
+* from Canon *BJC-85 / K10190* Bubble Jet printer to Pulolu driver
 
-|Stepper|- |-|Pulolu |Pin|
-|------:|-|-|:-------|:-:|
-|Red |![](http://www.realaxl.de//static/pix/color_gadgets/square_16_red.png) ||![](http://www.realaxl.de//static/pix/color_gadgets/square_16_red.png) |Red   |2B |
-|Brown|![](http://www.realaxl.de//static/pix/color_gadgets/square_16_brown.png)   | ![](http://www.realaxl.de//static/pix/color_gadgets/square_16_blue.png)| Blue  |2A |
-|Yellow|![](http://www.realaxl.de//static/pix/color_gadgets/square_16_yellow.png)  | ![](http://www.realaxl.de//static/pix/color_gadgets/square_16_black.png)| Black |1A |
-|Blue|![](http://www.realaxl.de//static/pix/color_gadgets/square_16_blue.png)    | ![](http://www.realaxl.de//static/pix/color_gadgets/square_16_green.png)| Green |1B |
+|Stepper|-       |-       |Pulolu|Pin|
+|------:|--------|--------|:-----|:-:|
+|Red    |![][102]|![][102]|Red   |2B |
+|Brown  |![][101]|![][106]|Blue  |2A |
+|Yellow |![][104]|![][100]|Black |1A |
+|Blue   |![][106]|![][105]|Green |1B |
 
 
 Linear motion - Half step config
@@ -74,3 +75,16 @@ Brown -----> Blue ------> Pin 2A
 Yellow ----> Black -----> Pin 1A
 Blue ------> Green -----> Pin 1B
 ```
+
+
+  [100]: http://www.realaxl.de/static/pix/color_gadgets/square_16_black.png
+  [101]: http://www.realaxl.de/static/pix/color_gadgets/square_16_brown.png
+  [102]: http://www.realaxl.de/static/pix/color_gadgets/square_16_red.png
+  [103]: http://www.realaxl.de/static/pix/color_gadgets/square_16_orange.png
+  [104]: http://www.realaxl.de/static/pix/color_gadgets/square_16_yellow.png
+  [105]: http://www.realaxl.de/static/pix/color_gadgets/square_16_green.png
+  [106]: http://www.realaxl.de/static/pix/color_gadgets/square_16_blue.png
+  [107]: http://www.realaxl.de/static/pix/color_gadgets/square_16_purple.png
+  [108]: http://www.realaxl.de/static/pix/color_gadgets/square_16_grey.png
+  [109]: http://www.realaxl.de/static/pix/color_gadgets/square_16_white.png
+  [110]: http://www.realaxl.de/static/pix/color_gadgets/square_16_gold.png  

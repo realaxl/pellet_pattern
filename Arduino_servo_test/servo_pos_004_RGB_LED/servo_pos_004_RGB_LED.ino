@@ -11,8 +11,8 @@ Servo servo_sep;  // separator
  
 int pos_hi = 0;    // variable to store the servo position 
 int pos_lo = 0;
-int target_hi = 180;
-int target_lo = 40;
+int target_hi = 0;
+int target_lo = 0;
 
 int target_offset = 20;
 int servo_offset = target_offset;
@@ -35,6 +35,12 @@ int detector_pin = A1;
 const int analogInPin = A0;  // Analog input pin that the potentiometer is attached to
 
 
+// photo eye input read test
+const int buttonPin = 2;     // the number of the pushbutton pin
+const int ledPin =  13;      // the number of the LED pin
+int buttonState = 0;         // variable for reading the pushbutton status
+
+
 // serial command processor
 byte inByte = 0;         // incoming serial byte
 byte cmd;                // command (1 character)
@@ -52,6 +58,10 @@ void setup() {
   servo_hi.attach(9);   // attaches the servo on pin 9 to the servo object 
   servo_lo.attach(10);  // attaches the servo on pin 9 to the servo object 
   servo_sep.attach(3);  // attaches the servo on pin 9 to the servo object 
+
+  // photo eye input read test
+  pinMode(buttonPin, INPUT);
+  pinMode(ledPin, OUTPUT);
 
   Serial.begin(9600);
   
@@ -161,7 +171,21 @@ void loop()
         if ((inByte >= '0') && (inByte <= '9')) val = val * 10 + (inByte - '0');
       }
     }
-  }  
+  }
+
+  // photo eye input read test
+  buttonState = digitalRead(buttonPin);
+
+  // check if the opto pushbutton is pressed.
+  // if it is, the buttonState is HIGH:
+  if (buttonState == HIGH) {     
+    // turn LED on:    
+    digitalWrite(ledPin, HIGH);  
+  } 
+  else {
+    // turn LED off:
+    digitalWrite(ledPin, LOW); 
+  }    
 }
 
 
